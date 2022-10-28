@@ -1,25 +1,20 @@
 package com.gbossoufolly.blogapi;
 
-import com.gbossoufolly.blogapi.entities.User;
-import com.gbossoufolly.blogapi.payloads.UserDTO;
-import com.gbossoufolly.blogapi.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.w3c.dom.stylesheets.LinkStyle;
-
-import java.util.Arrays;
-import java.util.Collections;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-public class BlogApiApplication {
+public class BlogApiApplication implements CommandLineRunner {
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
-
 		SpringApplication.run(BlogApiApplication.class, args);
 	}
 
@@ -29,4 +24,9 @@ public class BlogApiApplication {
 		return new ModelMapper();
 	}
 
+	@Override
+	public void run(String... args) throws Exception {
+
+		System.out.println(passwordEncoder.encode("xyz"));
+	}
 }

@@ -68,7 +68,7 @@ public class PostController {
     }
 
     // get all posts
-    @GetMapping("/all-posts")
+    @GetMapping(value = {"/","/all-posts"})
     public ResponseEntity<PostResponse> getAllPost(
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
