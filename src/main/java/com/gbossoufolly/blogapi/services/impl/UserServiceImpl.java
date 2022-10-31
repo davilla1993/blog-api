@@ -1,12 +1,16 @@
 package com.gbossoufolly.blogapi.services.impl;
 
+import com.gbossoufolly.blogapi.config.AppConstants;
+import com.gbossoufolly.blogapi.entities.Role;
 import com.gbossoufolly.blogapi.entities.User;
 import com.gbossoufolly.blogapi.exceptions.ResourceNotFoundException;
 import com.gbossoufolly.blogapi.payloads.UserDTO;
+import com.gbossoufolly.blogapi.repositories.RoleRepository;
 import com.gbossoufolly.blogapi.repositories.UserRepository;
 import com.gbossoufolly.blogapi.services.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +23,33 @@ public class UserServiceImpl implements UserService {
 
     private static UserRepository userRepository;
     private static ModelMapper modelMapper;
+    private PasswordEncoder passwordEncoder;
+
+    private RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
+    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper,
+                                PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+    }
+
+    @Override
+    public UserDTO registerNewUser(UserDTO userDTO) {
+
+        User user = modelMapper.map(userDTO, User.class);
+        // encoded the password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // role
+        Role role = roleRepository.findById(AppConstants.ROLE_USER).get();
+        user.getRoles().add(role);
+
+        User newUser = userRepository.save(user);
+
+        return modelMapper.map(newUser, UserDTO.class);
     }
 
     @Override
