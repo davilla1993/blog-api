@@ -41,7 +41,7 @@ public class BlogApiApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		System.out.println(passwordEncoder.encode("1234"));
+//		System.out.println(passwordEncoder.encode("1234"));
 
 		try{
 
@@ -57,10 +57,10 @@ public class BlogApiApplication implements CommandLineRunner {
 
 			List<Role> result = roleRepository.saveAll(roles);
 
-			result.forEach(r -> {
+			/*result.forEach(r -> {
 				System.out.println(r.getName());
 
-			});
+			});*/
 
 		}catch (Exception ex) {
 			ex.getMessage();

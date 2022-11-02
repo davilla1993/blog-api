@@ -3,6 +3,7 @@ package com.gbossoufolly.blogapi.services.impl;
 import com.gbossoufolly.blogapi.config.AppConstants;
 import com.gbossoufolly.blogapi.entities.Role;
 import com.gbossoufolly.blogapi.entities.User;
+import com.gbossoufolly.blogapi.exceptions.AlreadyExistsException;
 import com.gbossoufolly.blogapi.exceptions.ResourceNotFoundException;
 import com.gbossoufolly.blogapi.payloads.UserDTO;
 import com.gbossoufolly.blogapi.repositories.RoleRepository;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +41,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO registerNewUser(UserDTO userDTO) {
 
+        String email = userDTO.getEmail();
+        User existUser = userRepository.findByEmail(email).orElse(null);
+
+        if(existUser != null){
+            throw new AlreadyExistsException("User", "email", email);
+        }
+
+
         User user = modelMapper.map(userDTO, User.class);
         // encoded the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -54,6 +64,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserDTO userDTO) {
+
+        String email = userDTO.getEmail();
+        User existUser = userRepository.findByEmail(email).orElse(null);
+
+        if(existUser != null){
+            throw new AlreadyExistsException("User", "email", email);
+        }
 
         User user = dtoToUser(userDTO);
         User savedUser = userRepository.save(user);

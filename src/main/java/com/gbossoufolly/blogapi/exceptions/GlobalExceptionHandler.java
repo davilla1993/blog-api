@@ -47,4 +47,14 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ApiResponse> AlreadyExistsExceptionHandler(
+            AlreadyExistsException alreadyExistsException) {
+
+        String message = alreadyExistsException.getMessage();
+        ApiResponse apiResponse = new ApiResponse(message, false);
+
+        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.CONFLICT);
+    }
 }

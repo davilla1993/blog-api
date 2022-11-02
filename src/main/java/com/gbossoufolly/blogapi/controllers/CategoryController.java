@@ -5,6 +5,7 @@ import com.gbossoufolly.blogapi.payloads.CategoryDTO;
 import com.gbossoufolly.blogapi.services.CategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -57,6 +58,7 @@ public class CategoryController {
     }
 
     // delete category
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete-category/{categoryId}")
     public ResponseEntity<ApiResponse> deleteCategory(@PathVariable("categoryId") Integer categoryId) {
 

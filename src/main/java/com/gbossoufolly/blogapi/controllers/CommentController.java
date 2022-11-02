@@ -6,6 +6,7 @@ import com.gbossoufolly.blogapi.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,6 +29,7 @@ public class CommentController {
         return new ResponseEntity<CommentDTO>(createComment, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete-comment/{commentId}")
     public ResponseEntity<ApiResponse> deleteComment(@PathVariable("commentId") Integer commentId) {
 
